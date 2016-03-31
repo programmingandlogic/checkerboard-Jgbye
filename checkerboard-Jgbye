@@ -1,0 +1,90 @@
+/*
+ * File: CheckerboardKarel.java
+ * ----------------------------
+ * When you finish writing it, the CheckerboardKarel class should draw
+ * a checkerboard using beepers, as described in Assignment 1.  You
+ * should make sure that your program works for all of the sample
+ * worlds supplied in the starter folder.
+ */
+
+import stanford.karel.*;
+
+public class CheckerboardKarel extends SuperKarel {
+	
+	/* addLastBeeper makes Karel check for a beeper in 
+	 * the spot he is currently in. If no beeper is found,
+	 * he will place one on the row along the wall.
+	 */
+	private void addLastBeeper() {
+		turnAround();
+		move();
+		if(noBeepersPresent()) {
+			turnAround();
+			move();
+			putBeeper();
+			
+		} else {
+			turnAround();
+			move();
+			
+		}
+	}
+	
+	/* goBack will make Karel go back to left wall.
+	 */
+	private void goBack() {
+		turnAround();
+		while(frontIsClear()) {
+			move();
+		}
+		if(frontIsBlocked()) {
+			turnRight();
+		}
+	}
+
+	/* oddLayer will make Karel put beepers on 
+	 * every other space on every odd numbered row
+	 */
+	private void oddLayer() {
+		while(frontIsClear()) {
+			putBeeper();
+			move();
+			if(frontIsClear()) {
+				move();
+			
+			}	
+		}
+		addLastBeeper();
+	}
+	
+	/* evenLayer will make Karel put beepers on 
+	 * every other space on every even numbered row
+	 */
+	private void evenLayer() {
+		while(frontIsClear()) {
+			move();
+			if(frontIsClear()) {
+				putBeeper();
+				move();
+			}
+		}
+		addLastBeeper();
+	}
+	public void run() {
+		while(frontIsClear()) {
+			oddLayer();
+			goBack();
+			if(frontIsClear()) {
+				move();
+				turnRight();
+				evenLayer();
+				goBack();
+				if(frontIsClear()) {
+					move();
+					turnRight();
+				}
+			}
+		}
+	}
+}
+ 
